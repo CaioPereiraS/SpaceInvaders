@@ -16,7 +16,7 @@ public class Spaceship {
         posY = 520;
         velX = 0;
         try{
-            ship = ImageIO.read(getClass().getResource(""));
+            ship = ImageIO.read(getClass().getResource("images/nave.png"));
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -155,6 +155,58 @@ public class Game  extends JPanel {
         if (nave.posX + (nave.largura) > Principal.LARGURA_TELA || nave.posX < 0) { // testando colisão horizontal
             nave.posX -= nave.velX; // nega a velx impedidnado que ande
         }
+        for (int i = 0; i<6; i++){ // teste de colisão por matriz, setando novos atributos pós colisao
+            for (int j = 0; j<8; j++){
+                Aliens atual = listaAlien[i][j];
+                if(atual.isVisble==false){//se o inimigo tive destruido nem testa
+                    continue;
+                }
+                if(shot.posX<=atual.posX + atual.largura&&
+                shot.posX>= atual.posX &&
+                shot.posY<=atual.posY+ atual.altura &&
+                shot.posY>=atual.posY &&
+                shot.active == true){
+                    atual.isVisble=false;// seta inimigos atingidos para false
+                    atual.inimigo = null;// destroi a imagem do inimigo
+                    shot.active = false; // tiro deixa de existir
+                    shot.shot = null; // destroi a imagem do tiro
+                    shooting = false; // deixa atirar dnv
+                }
+            }
+        }
+        // checar aliens colidindo com a tela
+        for (int i = 0; i <6; i++){
+            for (int j = 0; j<8; j++){
+                Aliens atual = listaAlien[i][j];
+                if (atual.posX + atual.largura > Principal.LARGURA_TELA){// checa colisao com o lado direito
+                    atual.posY += atual.altura; // desce uma altura
+                    atual.velX*= -1.2; // aumenta em 1,2 a velocidade
+                }
+                if (atual.posX<=0){//checa a colisao com o lado esquedo
+                    atual.posY+= listaAlien[i][j].altura;//desce a matriz inteira
+                    atual.velX*= -1.2;//aumenta dnv a velocidade
+                }
+            }
+        }
+        if (shooting==true && shot.posY<0){// se o tiro sair da tela pode atirar dnv
+            shooting=false;
+        }
+        }
+
+        protected  void paintComponent(Graphics g){
+            super.paintComponent(g); // desenha as coisas na tela
+            g.drawImage(bg1.bg, bg1.posX, bg1.posY,null);
+            g.drawImage(bg2.bg, bg2.posX, bg2.posY,null);
+            for(int i = 0; i < 6; i++){ // desenha a matriz de aliens
+                for(int j = 0; j<8; j++){
+                    g.drawImage(listaAlien[i][j].inimigo,listaAlien[i][j].posX,listaAlien[i][j].posY,null);
+                }
+            }
+            g.drawImage(nave.ship, nave.posX, nave.posY, null); // desenha a nave
+            if(shooting){
+                g.drawImage(shot.shot, shot.posX, shot.posY,null);
+            }
+
         }
     }
 

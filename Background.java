@@ -11,8 +11,8 @@ public class Background {
         posX = 0;
         posY = 0;
         try{
-            bg  = ImageIO.read(getClass().getResource(""));
-            bg2 = ImageIO.read(getClass().getResource(""));
+            bg  = ImageIO.read(getClass().getResource("images/bg2.png"));
+            bg2 = ImageIO.read(getClass().getResource("images/bg2.png"));
         }catch (Exception e){
             e.printStackTrace();
         }

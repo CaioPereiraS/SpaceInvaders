@@ -20,7 +20,7 @@ public class Aliens {
         velX = 4;
         isVisble = true;
         try{
-            inimigo = ImageIO.read(getClass().getResource(""));
+            inimigo = ImageIO.read(getClass().getResource("images/alien.png"));
         }catch (Exception e){
             e.printStackTrace();
         }

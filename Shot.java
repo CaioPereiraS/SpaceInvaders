@@ -20,7 +20,7 @@ public class Shot {
         velY = -15;
         active = true;
         try{
-            shot = ImageIO.read(getClass().getResource(""));
+            shot = ImageIO.read(getClass().getResource("images/tiro.png"));
         }catch (Exception e){
             e.printStackTrace();
         }
