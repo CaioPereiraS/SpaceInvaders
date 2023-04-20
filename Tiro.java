@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.ExecutionException;
 
-public class Shot {
+public class Tiro {
     public int posX;
     public int posY;
     public int velY;
@@ -12,9 +12,9 @@ public class Shot {
     public BufferedImage shot;
     boolean active;
 
-    public Shot(){
-        largura = 1;
-        altura = 5;
+    public Tiro(){
+        largura = 2;
+        altura = 10;
         posX = 0;
         posY = 0;
         velY = -15;

@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.awt.*;
 
 public class Game  extends JPanel {
@@ -14,7 +15,8 @@ public class Game  extends JPanel {
     Background bg1;
     Background bg2;
     Aliens[][] listaAlien =new Aliens[6][8];
-    Shot shot;
+    Tiro shot;
+    boolean fim = false;
 
     //construtor
     public Game(){
@@ -43,21 +45,6 @@ public class Game  extends JPanel {
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()){
                     case KeyEvent.VK_LEFT: // pega o valor da seta esquerda
-                        k_esquerda = false;
-                        break;
-                    case KeyEvent.VK_RIGHT: // pega o valor da seta direita
-                        k_direita = false;
-                        break;
-                    case KeyEvent.VK_SPACE: // pega o valor do espaço
-                        k_space = false;
-                        break;
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                switch (e.getKeyCode()){
-                    case KeyEvent.VK_LEFT: // pega o valor da seta esquerda
                         k_esquerda = true;
                         break;
                     case KeyEvent.VK_RIGHT: // pega o valor da seta direita
@@ -68,12 +55,27 @@ public class Game  extends JPanel {
                         break;
                 }
             }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                switch (e.getKeyCode()){
+                    case KeyEvent.VK_LEFT: // pega o valor da seta esquerda
+                        k_esquerda = false;
+                        break;
+                    case KeyEvent.VK_RIGHT: // pega o valor da seta direita
+                        k_direita = false;
+                        break;
+                    case KeyEvent.VK_SPACE: // pega o valor do espaço
+                        k_space = false;
+                        break;
+                }
+            }
         });
 
-        bg1 = new Background(); //instancia do back1
-        bg2 = new Background(); //instancia do back2
+        bg1 = new Background("images/bg1.png"); //instancia do back1
+        bg2 = new Background("images/bg2.png"); //instancia do back2
         nave = new Spaceship();
-        shot = new Shot();
+        shot = new Tiro();
 
         bg1.posX = 0;
         bg1.posY = 0;
@@ -93,11 +95,14 @@ public class Game  extends JPanel {
     public void gameloop(){
         while(true){//loop infinito
             handlerEvents();
-            update();
+
+            //game over no else
+            if(fim == false){update();}
+
             render();
 
             try{
-                Thread.sleep(17);//pausa a thread
+                Thread.sleep(17); //pausa a thread
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
@@ -119,7 +124,7 @@ public class Game  extends JPanel {
             shot.posY = nave.posY;
             shot.active = true;
             try{
-                shot.shot = ImageIO.read(getClass().getResource(""));
+                shot.shot = ImageIO.read(getClass().getResource("images/tiro.png"));
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -127,13 +132,13 @@ public class Game  extends JPanel {
     }
     public void update(){
         if (bg1.posY == 1200){ // reseta o bg1
-            bg1.posY =- 1200;
+            bg1.posY =- 0;
         }
         if (bg2.posY == 1200){ //reseta o bg2
             bg2.posY =- 1200;
         }
-        bg1.posY +=8;// movimento do bg1
-        bg2.posY +=8;// movimento do bg1
+        bg1.posY +=10; // movimento do bg1
+        bg2.posY +=10; // movimento do bg1
 
         nave.posX += nave.velX; // atualiza o movimento
         if(shooting == true){ //se estiver atiranfo a posição y do tiro é somada com a velocidade y do tiro
@@ -144,14 +149,15 @@ public class Game  extends JPanel {
                 listaAlien[i][j].posX += listaAlien[i][j].velX;
             }
         }
-        testeColisao();
 
+       testeColisao();
+        
     }
 
     public void render(){
         repaint(); //repinta a tela toda
     }
-    public void testeColisao(){
+    public boolean testeColisao(){
         if (nave.posX + (nave.largura) > Principal.LARGURA_TELA || nave.posX < 0) { // testando colisão horizontal
             nave.posX -= nave.velX; // nega a velx impedidnado que ande
         }
@@ -166,8 +172,11 @@ public class Game  extends JPanel {
                 shot.posY<=atual.posY+ atual.altura &&
                 shot.posY>=atual.posY &&
                 shot.active == true){
+
+                  
+    
                     atual.isVisble=false;// seta inimigos atingidos para false
-                    atual.inimigo = null;// destroi a imagem do inimigo
+                    //atual.inimigo = ;// destroi a imagem do inimigo
                     shot.active = false; // tiro deixa de existir
                     shot.shot = null; // destroi a imagem do tiro
                     shooting = false; // deixa atirar dnv
@@ -186,11 +195,27 @@ public class Game  extends JPanel {
                     atual.posY+= listaAlien[i][j].altura;//desce a matriz inteira
                     atual.velX*= -1.2;//aumenta dnv a velocidade
                 }
+
+                //colisão com o fim da página
+                if(((atual.posY + atual.altura ) > Principal.ALTURA_TELA && atual.isVisble== true)){
+                    return fim = true;
+                }
+
+                //colisão com a nave
+                if(nave.posX<=atual.posX + atual.largura&&
+                 nave.posX>= atual.posX &&
+                nave.posY<=atual.posY+ atual.altura &&
+                nave.posY>=atual.posY &&
+                atual.isVisble== true ){
+                    return fim = true;
+                }
+
             }
         }
         if (shooting==true && shot.posY<0){// se o tiro sair da tela pode atirar dnv
             shooting=false;
         }
+        return fim = false;
         }
 
         protected  void paintComponent(Graphics g){
