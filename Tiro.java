@@ -1,7 +1,6 @@
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.ExecutionException;
+import java.util.Objects;
 
 public class Tiro {
     public int posX;
@@ -20,7 +19,7 @@ public class Tiro {
         velY = -15;
         ativo = true;
         try{
-            shot = ImageIO.read(getClass().getResource("images/tiro.png"));
+            shot = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/tiro.png")));
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+
 public class Aliens {
 
     public int posX;
@@ -12,16 +13,16 @@ public class Aliens {
 
     public boolean isVisble;
 
-    public Aliens(){
+    public Aliens() {
         largura = 40;
         altura = 40;
         posX = 50;
         posY = 10;
         velX = 4;
         isVisble = true;
-        try{
+        try {
             inimigo = ImageIO.read(getClass().getResource("images/alien.png"));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

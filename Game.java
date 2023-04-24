@@ -2,39 +2,37 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.awt.*;
+import java.util.Objects;
 
-public class Game  extends JPanel {
+public class Game extends JPanel {
     Spaceship nave;
-    int frame = 1;
     boolean k_esquerda;
     boolean k_direita;
     boolean k_space;
     boolean atirando;
     Background bg1;
     Background bg2;
-    Aliens[][] listaAlien =new Aliens[6][8];
+    Aliens[][] listaAlien = new Aliens[6][8];
     Tiro disparo;
     int total_de_naves = 48;
     boolean fim = false;
 
     //construtor
-    public Game(){
-        int X= 165; // posicao x inicial na tela do alien
-        int Y= 20; //posicao y inicial da tela na coluna 1
-        for (int i= 0;i < 6; i++ ){
-            for(int j = 0; j < 8; j++){
+    public Game() {
+        int X = 165; // posição x inicial na tela do alien
+        int Y = 20; //posição y inicial da tela na coluna 1
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 8; j++) {
                 Aliens alien = new Aliens();
                 alien.posX = X;
                 alien.posY = Y;
-                listaAlien[i][j]=alien;
+                listaAlien[i][j] = alien;
                 X += 60;
             }
 
             X = 165;
-            Y+=45; //a cada coluna diferença de 45 px
+            Y += 45; //a cada coluna diferença de 45 px
 
         }
         addKeyListener(new KeyListener() {
@@ -45,7 +43,7 @@ public class Game  extends JPanel {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()){
+                switch (e.getKeyCode()) {
                     case KeyEvent.VK_LEFT: // pega o valor da seta esquerda
                         k_esquerda = true;
                         break;
@@ -60,7 +58,7 @@ public class Game  extends JPanel {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                switch (e.getKeyCode()){
+                switch (e.getKeyCode()) {
                     case KeyEvent.VK_LEFT: // pega o valor da seta esquerda
                         k_esquerda = false;
                         break;
@@ -83,108 +81,108 @@ public class Game  extends JPanel {
         bg1.posY = 0;
         bg2.posX = 0;
         bg2.posY = -600;// pq é 1200 de altura. quando o que movimentar pra baixa o de cima aparece
-        setFocusable(true); // tem a capacidade de receber foco
+        setFocusable(true); // consegue receber foco
         setLayout(null);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                gameloop(); // é invocado em uma nova unidade de execução
-            }
+        new Thread(() -> {
+            gameloop(); // é invocado em uma nova unidade de execução
         }).start();
 
     }
 
-    // metodo do game loop
-    public void gameloop(){
-        while(true){//loop infinito
+    // método do game loop
+    public void gameloop() {
+        while (true) {//loop infinito
             handlerEvents();
 
             //game over no else
-             if(fim == false){
-                 update();
-             }
+            if (!fim) {
+                update();
+            }
 
             render();
 
-            try{
+            try {
                 Thread.sleep(17); //pausa a thread
-            }catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
         }
 
     }
-    public void handlerEvents(){
+
+    public void handlerEvents() {
         nave.velX = 0;
 
-        if(k_esquerda==true){// tecla esquerda pressionada
+        if (k_esquerda) {// tecla esquerda pressionada
             nave.velX = -5;
-        } else if (k_direita==true) {// tecla direita
+        } else if (k_direita) {// tecla direita
             nave.velX = 5;
         }
-        if(k_space== true && atirando == false){
+        if (k_space && !atirando) {
             atirando = true;
-            disparo.posX = nave.posX + (nave.largura/2);
+            disparo.posX = nave.posX + (nave.largura / 2);
             disparo.posY = nave.posY;
             disparo.ativo = true;
-            try{
-                disparo.shot = ImageIO.read(getClass().getResource("images/tiro.png"));
-            }catch (Exception e){
+            try {
+                disparo.shot = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/tiro.png")));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-    public void update(){
-        if (bg1.posY == 600){ // reseta o bg1
+
+    public void update() {
+        if (bg1.posY == 600) { // reset o bg1
             bg1.posY = -600;
         }
-        if (bg2.posY == 600){ //reseta o bg2
+        if (bg2.posY == 600) { //reset o bg2
             bg2.posY = -600;
         }
-        bg1.posY +=10; // movimento do bg1
-        bg2.posY +=10; // movimento do bg1
+        bg1.posY += 10; // movimento do bg1
+        bg2.posY += 10; // movimento do bg1
 
         nave.anima_nave(nave); // executa a função na thread secundária, anima a nave
 
         nave.posX += nave.velX; // atualiza o movimento
-        if(atirando == true){ //se estiver atiranfo a posição y do tiro é somada com a velocidade y do tiro
+        if (atirando) { //se estiver atirando a posição y do tiro é somada com a velocidade y do tiro
             disparo.posY += disparo.velY;
         }
-        for (int i = 0; i < 6; i++){ //movimenta os aliens horizontalmente
-            for (int j = 0; j < 8; j++){
+        for (int i = 0; i < 6; i++) { //movimenta os aliens horizontalmente
+            for (int j = 0; j < 8; j++) {
                 listaAlien[i][j].posX += listaAlien[i][j].velX;
             }
         }
 
-       testeColisao();
-        
+        testeColisao();
+
     }
 
-    public void render(){
+    public void render() {
         repaint(); //repinta a tela toda
     }
-    public boolean testeColisao(){
+
+    public boolean testeColisao() {
         nave.testeColisao(nave);
 
-        for (int i = 0; i<6; i++){ // teste de colisão por matriz, setando novos atributos pós colisao
-            for (int j = 0; j<8; j++){
+        for (int i = 0; i < 6; i++) { // teste de colisão por matriz, setando novos atributos pós-colisão
+            for (int j = 0; j < 8; j++) {
                 Aliens atual = listaAlien[i][j];
-                if(atual.isVisble==false){//se o inimigo tive destruido nem testa
+                if (!atual.isVisble) {//se o inimigo tive destruído nem testa
                     continue;
                 }
-                if(disparo.posX<=atual.posX + atual.largura&&
-                disparo.posX>= atual.posX &&
-                disparo.posY<=atual.posY+ atual.altura &&
-                disparo.posY>=atual.posY &&
-                disparo.ativo){
-                    atual.isVisble=false;// seta inimigos atingidos para false
-                    atual.inimigo = null;// destroi a imagem do inimigo
+                if (disparo.posX <= atual.posX + atual.largura &&
+                        disparo.posX >= atual.posX &&
+                        disparo.posY <= atual.posY + atual.altura &&
+                        disparo.posY >= atual.posY &&
+                        disparo.ativo) {
+                    atual.isVisble = false;// seta os inimigos atingidos para false
+                    atual.inimigo = null;// destrói as imagens inimigas
                     disparo.ativo = false; // tiro deixa de existir
-                    disparo.shot = null; // destroi a imagem do tiro
+                    disparo.shot = null; // destrói a imagem do tiro
                     atirando = false; // deixa atirar dnv
                     total_de_naves--;
-                    if (total_de_naves==0){
+                    if (total_de_naves == 0) {
                         return fim = true;
                     }
 
@@ -192,53 +190,55 @@ public class Game  extends JPanel {
             }
         }
         // checar aliens colidindo com a tela
-        for (int i = 0; i <6; i++){
-            for (int j = 0; j<8; j++){
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 8; j++) {
                 Aliens atual = listaAlien[i][j];
-                if (atual.posX + atual.largura > Principal.LARGURA_TELA){// checa colisão com o lado direito
+                if (atual.posX + atual.largura > Principal.LARGURA_TELA) {// checa colisão com o lado direito
                     atual.posY += atual.altura; // desce uma altura
-                    atual.velX*= -1.2; // aumenta em 1,2 a velocidade
+                    atual.velX *= -1.2; // aumenta em 1,2 a velocidade
                 }
-                if (atual.posX<=0){//checa a colisão com o lado esquerdo
-                    atual.posY+= listaAlien[i][j].altura;//desce a matriz inteira
-                    atual.velX*= -1.2;//aumenta dnv a velocidade
+                if (atual.posX <= 0) {//checa a colisão com o lado esquerdo
+                    atual.posY += listaAlien[i][j].altura;//desce a matriz inteira
+                    atual.velX *= -1.2;//aumenta dnv a velocidade
                 }
 
                 //colisão com o fim da página
-                if(((atual.posY + atual.altura ) > Principal.ALTURA_TELA && atual.isVisble)){
+                if (((atual.posY + atual.altura) > Principal.ALTURA_TELA && atual.isVisble)) {
                     return fim = true;
                 }
 
                 //colisão com a nave
-                if(nave.posX<=atual.posX + atual.largura&&
-                 nave.posX>= atual.posX &&
-                nave.posY<=atual.posY+ atual.altura &&
-                nave.posY>=atual.posY &&
-                        atual.isVisble){
+                if (nave.posX <= atual.posX + atual.largura &&
+                        nave.posX >= atual.posX &&
+                        nave.posY <= atual.posY + atual.altura &&
+                        nave.posY >= atual.posY &&
+                        atual.isVisble) {
                     return fim = true;
                 }
 
             }
         }
-        if (atirando && disparo.posY<0){// se o tiro sair da tela pode atirar dnv
-            atirando=false;
+
+        // checa alien com o tiro
+        if (atirando && disparo.posY < 0) {// se o tiro sair da tela pode atirar dnv
+            atirando = false;
         }
         return fim = false;
-        }
-
-        protected  void paintComponent(Graphics g){
-            super.paintComponent(g); // desenha as coisas na tela
-            g.drawImage(bg1.bg, bg1.posX, bg1.posY,null);
-            g.drawImage(bg2.bg, bg2.posX, bg2.posY,null);
-            for(int i = 0; i < 6; i++){ // desenha a matriz de aliens
-                for(int j = 0; j<8; j++){
-                    g.drawImage(listaAlien[i][j].inimigo,listaAlien[i][j].posX,listaAlien[i][j].posY,null);
-                }
-            }
-            g.drawImage(nave.ship, nave.posX, nave.posY, null); // desenha a nave
-            if(atirando){
-                g.drawImage(disparo.shot, disparo.posX, disparo.posY,null);
-            }
-
-        }
     }
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g); // desenha as coisas na tela
+        g.drawImage(bg1.bg, bg1.posX, bg1.posY, null);
+        g.drawImage(bg2.bg, bg2.posX, bg2.posY, null);
+        for (int i = 0; i < 6; i++) { // desenha a matriz de aliens
+            for (int j = 0; j < 8; j++) {
+                g.drawImage(listaAlien[i][j].inimigo, listaAlien[i][j].posX, listaAlien[i][j].posY, null);
+            }
+        }
+        g.drawImage(nave.ship, nave.posX, nave.posY, null); // desenha a nave
+        if (atirando) {
+            g.drawImage(disparo.shot, disparo.posX, disparo.posY, null);
+        }
+
+    }
+}
