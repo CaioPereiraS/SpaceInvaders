@@ -1,6 +1,9 @@
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Spaceship {
     public int posX;
@@ -21,17 +24,27 @@ public class Spaceship {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public void anima_nave(Spaceship Nave) {
-        for (int i = 1; i < 5; i++) {
 
-            String caminho = "images/nave/nave" + i + ".png";
-            try {
-                Nave.ship = ImageIO.read(Objects.requireNonNull(getClass().getResource(caminho)));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        for (int i = 1; i < 5; i++) {
+            int finalI = i;
+            new Thread(() -> {
+                try {
+
+                    try {
+                        ship = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/nave/nave" + finalI + ".png")));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }).start();
         }
 
     }

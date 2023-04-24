@@ -83,6 +83,7 @@ public class Game extends JPanel {
         bg2.posY = -600;// pq é 1200 de altura. quando o que movimentar pra baixa o de cima aparece
         setFocusable(true); // consegue receber foco
         setLayout(null);
+
         new Thread(() -> {
             gameloop(); // é invocado em uma nova unidade de execução
         }).start();
