@@ -8,14 +8,15 @@ import java.awt.*;
 
 public class Game  extends JPanel {
     Spaceship nave;
+    int frame = 1;
     boolean k_esquerda;
     boolean k_direita;
     boolean k_space;
-    boolean shooting;
+    boolean atirando;
     Background bg1;
     Background bg2;
     Aliens[][] listaAlien =new Aliens[6][8];
-    Tiro shot;
+    Tiro disparo;
     int total_de_naves = 48;
     boolean fim = false;
 
@@ -76,7 +77,7 @@ public class Game  extends JPanel {
         bg1 = new Background("images/bg1.png"); //instancia do back1
         bg2 = new Background("images/bg2.png"); //instancia do back2
         nave = new Spaceship();
-        shot = new Tiro();
+        disparo = new Tiro();
 
         bg1.posX = 0;
         bg1.posY = 0;
@@ -90,6 +91,7 @@ public class Game  extends JPanel {
                 gameloop(); // é invocado em uma nova unidade de execução
             }
         }).start();
+
     }
 
     // metodo do game loop
@@ -121,13 +123,13 @@ public class Game  extends JPanel {
         } else if (k_direita==true) {// tecla direita
             nave.velX = 5;
         }
-        if(k_space== true && shooting == false){
-            shooting = true;
-            shot.posX = nave.posX + (nave.largura/2);
-            shot.posY = nave.posY;
-            shot.active = true;
+        if(k_space== true && atirando == false){
+            atirando = true;
+            disparo.posX = nave.posX + (nave.largura/2);
+            disparo.posY = nave.posY;
+            disparo.ativo = true;
             try{
-                shot.shot = ImageIO.read(getClass().getResource("images/tiro.png"));
+                disparo.shot = ImageIO.read(getClass().getResource("images/tiro.png"));
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -143,9 +145,11 @@ public class Game  extends JPanel {
         bg1.posY +=10; // movimento do bg1
         bg2.posY +=10; // movimento do bg1
 
+        nave.anima_nave(nave); // executa a função na thread secundária, anima a nave
+
         nave.posX += nave.velX; // atualiza o movimento
-        if(shooting == true){ //se estiver atiranfo a posição y do tiro é somada com a velocidade y do tiro
-            shot.posY += shot.velY;
+        if(atirando == true){ //se estiver atiranfo a posição y do tiro é somada com a velocidade y do tiro
+            disparo.posY += disparo.velY;
         }
         for (int i = 0; i < 6; i++){ //movimenta os aliens horizontalmente
             for (int j = 0; j < 8; j++){
@@ -161,25 +165,24 @@ public class Game  extends JPanel {
         repaint(); //repinta a tela toda
     }
     public boolean testeColisao(){
-        if (nave.posX + (nave.largura) > Principal.LARGURA_TELA || nave.posX < 0) { // testando colisão horizontal
-            nave.posX -= nave.velX; // nega a velx impedidnado que ande
-        }
+        nave.testeColisao(nave);
+
         for (int i = 0; i<6; i++){ // teste de colisão por matriz, setando novos atributos pós colisao
             for (int j = 0; j<8; j++){
                 Aliens atual = listaAlien[i][j];
                 if(atual.isVisble==false){//se o inimigo tive destruido nem testa
                     continue;
                 }
-                if(shot.posX<=atual.posX + atual.largura&&
-                shot.posX>= atual.posX &&
-                shot.posY<=atual.posY+ atual.altura &&
-                shot.posY>=atual.posY &&
-                        shot.active){
+                if(disparo.posX<=atual.posX + atual.largura&&
+                disparo.posX>= atual.posX &&
+                disparo.posY<=atual.posY+ atual.altura &&
+                disparo.posY>=atual.posY &&
+                disparo.ativo){
                     atual.isVisble=false;// seta inimigos atingidos para false
                     atual.inimigo = null;// destroi a imagem do inimigo
-                    shot.active = false; // tiro deixa de existir
-                    shot.shot = null; // destroi a imagem do tiro
-                    shooting = false; // deixa atirar dnv
+                    disparo.ativo = false; // tiro deixa de existir
+                    disparo.shot = null; // destroi a imagem do tiro
+                    atirando = false; // deixa atirar dnv
                     total_de_naves--;
                     if (total_de_naves==0){
                         return fim = true;
@@ -217,8 +220,8 @@ public class Game  extends JPanel {
 
             }
         }
-        if (shooting && shot.posY<0){// se o tiro sair da tela pode atirar dnv
-            shooting=false;
+        if (atirando && disparo.posY<0){// se o tiro sair da tela pode atirar dnv
+            atirando=false;
         }
         return fim = false;
         }
@@ -233,10 +236,9 @@ public class Game  extends JPanel {
                 }
             }
             g.drawImage(nave.ship, nave.posX, nave.posY, null); // desenha a nave
-            if(shooting){
-                g.drawImage(shot.shot, shot.posX, shot.posY,null);
+            if(atirando){
+                g.drawImage(disparo.shot, disparo.posX, disparo.posY,null);
             }
 
         }
     }
-

@@ -15,4 +15,6 @@ class Game_over extends JFrame {
         JLabel label = new JLabel(new ImageIcon("background.jpg"));
         getContentPane().add(label, BorderLayout.CENTER);
     }
+
+
 }

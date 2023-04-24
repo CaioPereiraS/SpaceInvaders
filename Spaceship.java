@@ -16,9 +16,18 @@ public class Spaceship {
         posY = 520;
         velX = 0;
         try{
-            ship = ImageIO.read(getClass().getResource("images/nave.png"));
+            ship = ImageIO.read(getClass().getResource("images/nave1.png"));
         }catch (Exception e){
             e.printStackTrace();
+        }
+    }
+    public void anima_nave(Spaceship Nave){
+
+    }
+
+    public void testeColisao(Spaceship nave){
+        if (nave.posX + (nave.largura) > Principal.LARGURA_TELA || nave.posX < 0) { // testando colisão horizontal
+            nave.posX -= nave.velX; // nega a velx impedidnado que ande
         }
     }
 }

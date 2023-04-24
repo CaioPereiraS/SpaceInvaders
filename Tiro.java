@@ -10,7 +10,7 @@ public class Tiro {
     public int altura;
     public int largura;
     public BufferedImage shot;
-    boolean active;
+    boolean ativo;
 
     public Tiro(){
         largura = 2;
@@ -18,7 +18,7 @@ public class Tiro {
         posX = 0;
         posY = 0;
         velY = -15;
-        active = true;
+        ativo = true;
         try{
             shot = ImageIO.read(getClass().getResource("images/tiro.png"));
         }catch (Exception e){
