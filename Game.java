@@ -16,6 +16,7 @@ public class Game  extends JPanel {
     Background bg2;
     Aliens[][] listaAlien =new Aliens[6][8];
     Tiro shot;
+    int total_de_naves = 48;
     boolean fim = false;
 
     //construtor
@@ -80,7 +81,7 @@ public class Game  extends JPanel {
         bg1.posX = 0;
         bg1.posY = 0;
         bg2.posX = 0;
-        bg2.posY = -1200;// pq é 1200 de altura. quando o que movimentar pra baixa o de cima aparece
+        bg2.posY = -600;// pq é 1200 de altura. quando o que movimentar pra baixa o de cima aparece
         setFocusable(true); // tem a capacidade de receber foco
         setLayout(null);
         new Thread(new Runnable() {
@@ -97,7 +98,9 @@ public class Game  extends JPanel {
             handlerEvents();
 
             //game over no else
-            if(fim == false){update();}
+             if(fim == false){
+                 update();
+             }
 
             render();
 
@@ -131,11 +134,11 @@ public class Game  extends JPanel {
         }
     }
     public void update(){
-        if (bg1.posY == 1200){ // reseta o bg1
-            bg1.posY =- 0;
+        if (bg1.posY == 600){ // reseta o bg1
+            bg1.posY = -600;
         }
-        if (bg2.posY == 1200){ //reseta o bg2
-            bg2.posY =- 1200;
+        if (bg2.posY == 600){ //reseta o bg2
+            bg2.posY = -600;
         }
         bg1.posY +=10; // movimento do bg1
         bg2.posY +=10; // movimento do bg1
@@ -171,15 +174,17 @@ public class Game  extends JPanel {
                 shot.posX>= atual.posX &&
                 shot.posY<=atual.posY+ atual.altura &&
                 shot.posY>=atual.posY &&
-                shot.active == true){
-
-                  
-    
+                        shot.active){
                     atual.isVisble=false;// seta inimigos atingidos para false
-                    //atual.inimigo = ;// destroi a imagem do inimigo
+                    atual.inimigo = null;// destroi a imagem do inimigo
                     shot.active = false; // tiro deixa de existir
                     shot.shot = null; // destroi a imagem do tiro
                     shooting = false; // deixa atirar dnv
+                    total_de_naves--;
+                    if (total_de_naves==0){
+                        return fim = true;
+                    }
+
                 }
             }
         }
@@ -187,17 +192,17 @@ public class Game  extends JPanel {
         for (int i = 0; i <6; i++){
             for (int j = 0; j<8; j++){
                 Aliens atual = listaAlien[i][j];
-                if (atual.posX + atual.largura > Principal.LARGURA_TELA){// checa colisao com o lado direito
+                if (atual.posX + atual.largura > Principal.LARGURA_TELA){// checa colisão com o lado direito
                     atual.posY += atual.altura; // desce uma altura
                     atual.velX*= -1.2; // aumenta em 1,2 a velocidade
                 }
-                if (atual.posX<=0){//checa a colisao com o lado esquedo
+                if (atual.posX<=0){//checa a colisão com o lado esquerdo
                     atual.posY+= listaAlien[i][j].altura;//desce a matriz inteira
                     atual.velX*= -1.2;//aumenta dnv a velocidade
                 }
 
                 //colisão com o fim da página
-                if(((atual.posY + atual.altura ) > Principal.ALTURA_TELA && atual.isVisble== true)){
+                if(((atual.posY + atual.altura ) > Principal.ALTURA_TELA && atual.isVisble)){
                     return fim = true;
                 }
 
@@ -206,13 +211,13 @@ public class Game  extends JPanel {
                  nave.posX>= atual.posX &&
                 nave.posY<=atual.posY+ atual.altura &&
                 nave.posY>=atual.posY &&
-                atual.isVisble== true ){
+                        atual.isVisble){
                     return fim = true;
                 }
 
             }
         }
-        if (shooting==true && shot.posY<0){// se o tiro sair da tela pode atirar dnv
+        if (shooting && shot.posY<0){// se o tiro sair da tela pode atirar dnv
             shooting=false;
         }
         return fim = false;
