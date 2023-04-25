@@ -17,6 +17,9 @@ public class Game extends JPanel {
     Tiro disparo;
     int total_de_naves = 48;
     boolean fim = false;
+    int frame_final = 60;
+
+    Animacao animador = new Animacao();
 
     //construtor
     public Game() {
@@ -103,7 +106,7 @@ public class Game extends JPanel {
             render();
 
             try {
-                Thread.sleep(17); //pausa a thread
+                Thread.sleep(18 ); //pausa a thread
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -116,9 +119,9 @@ public class Game extends JPanel {
         nave.velX = 0;
 
         if (k_esquerda) {// tecla esquerda pressionada
-            nave.velX = -5;
+            nave.velX = -7;
         } else if (k_direita) {// tecla direita
-            nave.velX = 5;
+            nave.velX = 7;
         }
         if (k_space && !atirando) {
             atirando = true;
@@ -140,8 +143,8 @@ public class Game extends JPanel {
         if (bg2.posY == 600) { //reset o bg2
             bg2.posY = -600;
         }
-        bg1.posY += 10; // movimento do bg1
-        bg2.posY += 10; // movimento do bg1
+        bg1.posY += 12; // movimento do bg1
+        bg2.posY += 12; // movimento do bg1
 
         nave.anima_nave(nave); // executa a função na thread secundária, anima a nave
 
@@ -210,13 +213,18 @@ public class Game extends JPanel {
 
                 //colisão com a nave
                 if (nave.posX <= atual.posX + atual.largura &&
-                        nave.posX >= atual.posX &&
-                        nave.posY <= atual.posY + atual.altura &&
-                        nave.posY >= atual.posY &&
-                        atual.isVisble) {
-                    return fim = true;
-                }
+                    nave.posX >= atual.posX &&
+                    nave.posY <= atual.posY + atual.altura &&
+                    nave.posY >= atual.posY &&
+                    atual.isVisble){
+                        atual.velX =0;
+                        animador.animarMorteNave(nave);
+                        frame_final--;
+                        if(frame_final ==0){
+                            return fim = true;
+                        }
 
+                }
             }
         }
 

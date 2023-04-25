@@ -5,20 +5,20 @@ public class Aliens {
 
     public int posX;
     public int posY;
-    public int velX;
+    public float velX;
     public int vely;
     public int altura;
     public int largura;
     public BufferedImage inimigo;
-
     public boolean isVisble;
+    public boolean ativo;
 
     public Aliens() {
         largura = 40;
         altura = 40;
         posX = 50;
         posY = 10;
-        velX = 4;
+        velX = 3f;
         isVisble = true;
         try {
             inimigo = ImageIO.read(getClass().getResource("images/alien.png"));

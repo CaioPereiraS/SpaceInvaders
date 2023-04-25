@@ -12,11 +12,11 @@ public class Tiro {
     boolean ativo;
 
     public Tiro(){
-        largura = 2;
+        largura = 3;
         altura = 10;
         posX = 0;
         posY = 0;
-        velY = -15;
+        velY = -17;
         ativo = true;
         try{
             shot = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/tiro.png")));
