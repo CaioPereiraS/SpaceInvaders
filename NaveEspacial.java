@@ -1,23 +1,20 @@
 import javax.imageio.ImageIO;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
-import java.awt.Component;
-import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
 
 
-
-public class Spaceship extends Thread{
+public class NaveEspacial extends Thread{
     public int posX;
     public int posY;
     public int velX;
     public int altura;
     public int largura;
+    Tiro disparo;
+    boolean atirando;
     public BufferedImage ship;
     public boolean ativo = true;
 
-    public Spaceship() {
+    public NaveEspacial() {
         largura = 60;
         altura = 60;
         posX = 340;
@@ -31,7 +28,7 @@ public class Spaceship extends Thread{
 
     }
 
-    public void anima_nave(Spaceship Nave) {
+    public void anima_nave(NaveEspacial Nave) {
 
         for (int i = 1; i < 5; i++) {
             int finalI = i;
@@ -43,25 +40,17 @@ public class Spaceship extends Thread{
                     }
             }).start();
         }
-
     }
 
-//    public void morte(Spaceship Nave){
-//        for (int i = 1; i < 10; i++) {
-//            int finalI = i;
-//            new Thread(() -> {
-//                try {
-//                    ship = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/morte" + finalI + ".png")));
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }).start();
-//        }
-//    }
-
-    public void testeColisao(Spaceship nave) {
+    public void testeColisao(NaveEspacial nave) {
         if (nave.posX + (nave.largura) > Principal.LARGURA_TELA || nave.posX < 0) { // testando colisão horizontal
             nave.posX -= nave.velX; // nega a velx impedidnado que ande
+        }
+    }
+
+    public void podeDisparar(NaveEspacial nave){
+        if (nave.atirando && nave.disparo.posY < 0) {// se o tiro sair da tela pode atirar dnv
+            nave.atirando = false;
         }
     }
 

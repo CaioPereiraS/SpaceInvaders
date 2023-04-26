@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Animacao extends JPanel {
 
-    public void animarMorteNave(Spaceship Nave){
+    public void animarMorteNave(NaveEspacial Nave){
 
         for (int i = 1; i < 10; i++) {
             int finalI = i;
