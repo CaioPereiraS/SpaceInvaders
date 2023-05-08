@@ -28,7 +28,7 @@ public class Aliens {
         }
     }
 
-    public boolean testeColisaoTela(Aliens alienAtual){
+    public boolean testeColisaoTela(Aliens alienAtual) {
 
         if (alienAtual.posX + alienAtual.largura > Principal.LARGURA_TELA) {// checa colisão com o lado direito
             alienAtual.posY += alienAtual.altura; // desce uma altura
@@ -41,30 +41,29 @@ public class Aliens {
 
         //colisão com o fim da página
         if ((alienAtual.posY + alienAtual.altura) > Principal.ALTURA_TELA && alienAtual.isVisble) {
-             return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
-    public boolean testeColisaoNave(Aliens alienAtual, NaveEspacial nave){
+    public boolean testeColisaoNave(Aliens alienAtual, NaveEspacial nave) {
 
         if (nave.posX <= alienAtual.posX + alienAtual.largura &&
                 nave.posX >= alienAtual.posX &&
                 nave.posY <= alienAtual.posY + alienAtual.altura &&
                 nave.posY >= alienAtual.posY &&
-                alienAtual.isVisble){
-            alienAtual.velX =0;
-            animador.animarMorteNave(nave);
-                return true;
-            }
+                alienAtual.isVisble) {
+            alienAtual.velX = 0;
+            return false;
+        }
 
-        return false;
+        return true;
     }
 
-    public boolean testeColisaoDisparo(Aliens alienAtual, NaveEspacial nave){
+    public boolean testeColisaoDisparo(Aliens alienAtual, NaveEspacial nave) {
 
         if (!alienAtual.isVisble) {//se o inimigo tive destruído nem testa
-            return true;
+            return false;
         }
         if (nave.disparo.posX <= alienAtual.posX + alienAtual.largura &&
                 nave.disparo.posX >= alienAtual.posX &&
@@ -80,5 +79,7 @@ public class Aliens {
         }
         return false;
     }
+
+
 
 }

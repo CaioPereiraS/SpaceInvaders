@@ -12,7 +12,7 @@ public class NaveEspacial extends Thread{
     Tiro disparo;
     boolean atirando;
     public BufferedImage ship;
-    public boolean ativo = true;
+    public boolean Viva = true;
 
     public NaveEspacial() {
         largura = 60;

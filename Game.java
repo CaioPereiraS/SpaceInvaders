@@ -16,6 +16,7 @@ public class Game extends JPanel {
     int total_de_naves = 48;
     boolean fim = false;
     Animacao animador = new Animacao();
+    int frame = 1;
 
     //construtor
     public Game() {
@@ -37,6 +38,7 @@ public class Game extends JPanel {
             @Override
             public void keyTyped(KeyEvent e) {
             }
+
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
@@ -51,6 +53,7 @@ public class Game extends JPanel {
                         break;
                 }
             }
+
             @Override
             public void keyReleased(KeyEvent e) {
                 switch (e.getKeyCode()) {
@@ -88,10 +91,11 @@ public class Game extends JPanel {
         while (true) {//loop infinito
             handlerEvents();
             //game over no else
-            if (!fim) {
+            if (fim) {
+                //game over
+            } else {
                 update();
             }
-
             // render e configura os 60 fps
             render();
             try {
@@ -116,7 +120,6 @@ public class Game extends JPanel {
             nave.disparo.posX = nave.posX + (nave.largura / 2);
             nave.disparo.posY = nave.posY;
             nave.disparo.ativo = true;
-
             try {
                 nave.disparo.shot = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/tiro.png")));
             } catch (Exception e) {
@@ -135,7 +138,6 @@ public class Game extends JPanel {
         bg1.posY += 12; // movimento do bg1
         bg2.posY += 12; // movimento do bg1
 
-        nave.anima_nave(nave); // executa a função na thread secundária, anima a nave
         nave.posX += nave.velX; // atualiza o movimento
         //se estiver atirando a posição y do tiro é somada com a velocidade y do tiro
         if (nave.atirando) {
@@ -152,44 +154,67 @@ public class Game extends JPanel {
 
     public boolean testeColisao() {
 
-        //colisão nave
-        nave.testeColisao(nave);
+        if (fim == false) {
+            //colisão nave
+            nave.testeColisao(nave);
 
-        // checar aliens colidindo
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 8; j++) {
-                listaAlien[i][j].posX += listaAlien[i][j].velX;
-                Aliens atual = listaAlien[i][j];
-                //colidindo com a tela
-                fim = atual.testeColisaoTela(atual);
-                //colidindo com a nave
-                fim = atual.testeColisaoNave(atual, nave);
-                //colidindo com o tiro
-                if (atual.testeColisaoDisparo(atual, nave)) {
-                    total_de_naves--;
-                    if (total_de_naves == 0) {
-                        fim = true;
+            // checar aliens colidindo
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 8; j++) {
+                    listaAlien[i][j].posX += listaAlien[i][j].velX;
+                    Aliens atual = listaAlien[i][j];
+                    //colidindo com a tela
+                    nave.Viva = atual.testeColisaoTela(atual);
+                    //colidindo com a nave
+                    nave.Viva = atual.testeColisaoNave(atual, nave)
+
+                    ;
+                    //colidindo com o tiro
+                    if (atual.testeColisaoDisparo(atual, nave)) {
+                        total_de_naves--;
+                        if (total_de_naves == 0) {
+                            fim = true;
+                        }
                     }
                 }
             }
+            // checa alien com o tiro
+            nave.podeDisparar(nave);
         }
-        // checa alien com o tiro
-        nave.podeDisparar(nave);
         return fim;
     }
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); // desenha as coisas na tela
+
         g.drawImage(bg1.bg, bg1.posX, bg1.posY, null);
         g.drawImage(bg2.bg, bg2.posX, bg2.posY, null);
+
+
+
         for (int i = 0; i < 6; i++) { // desenha a matriz de aliens
             for (int j = 0; j < 8; j++) {
                 g.drawImage(listaAlien[i][j].inimigo, listaAlien[i][j].posX, listaAlien[i][j].posY, null);
             }
         }
+
+        if (!nave.Viva) {
+            animador.animarMorteNave(nave, frame);
+            fim = true;
+
+
+        }
+
         g.drawImage(nave.ship, nave.posX, nave.posY, null); // desenha a nave
         if (nave.atirando) {
             g.drawImage(nave.disparo.shot, nave.disparo.posX, nave.disparo.posY, null);
         }
+        frame++;
+
+        if (frame > 10) {
+            frame = 1;
+        }
+
     }
+
 }

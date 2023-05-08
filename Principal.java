@@ -18,7 +18,7 @@ public class Principal {
         janela.pack();
 
     }
-    public static void main(String[] args){
+   public static void main(String[] args){
         new Principal();
-    }
+   }
 }

@@ -1,28 +1,23 @@
 import javax.swing.*;
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+
 import java.awt.*;
 import java.util.Objects;
 
 public class Animacao extends JPanel {
+    NaveEspacial Nave;
+    Aliens Alien;
 
-    public void animarMorteNave(NaveEspacial Nave){
+    public void animarMorteNave(NaveEspacial Nave, int frame) {
 
-        for (int i = 1; i < 10; i++) {
-            int finalI = i;
-            new Thread(() -> {
-                try {
-                    Nave.ship = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/morte" + finalI + ".png")));
-                    repaint();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
+        try {
+            Nave.ship = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/morte" + frame + ".png")));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
+
 
 
 }

@@ -16,7 +16,7 @@ public class Tiro {
         altura = 10;
         posX = 0;
         posY = 0;
-        velY = -17;
+        velY = -17 ;
         ativo = true;
         try{
             shot = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/tiro.png")));
