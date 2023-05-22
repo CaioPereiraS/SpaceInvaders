@@ -1,7 +1,8 @@
+package GameModule;
+
 import javax.swing.*;
 import javax.imageio.ImageIO;
 
-import java.awt.*;
 import java.util.Objects;
 
 public class Animacao extends JPanel {

@@ -1,3 +1,5 @@
+package GameModule;
+
 import java.awt.BorderLayout;
 
 import javax.swing.ImageIcon;
