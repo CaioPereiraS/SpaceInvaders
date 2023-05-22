@@ -16,6 +16,7 @@ public class Aliens {
     public boolean ativo;
     Animacao animador = new Animacao();
 
+//xxxx
     public Aliens() {
         largura = 40;
         altura = 40;
