@@ -110,12 +110,12 @@ public class TelaLogin extends JFrame {
         // Exiba uma mensagem adequada para o resultado da autenticação
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                TelaLogin tela = new TelaLogin();
-                tela.exibir();
-            }
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                TelaLogin tela = new TelaLogin();
+//                tela.exibir();
+//            }
+//        });
+//    }
 }

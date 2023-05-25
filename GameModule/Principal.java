@@ -24,8 +24,8 @@ public class Principal {
 
     }
 
-//    public static void main(String[] args) throws SQLException {
-//        UsuarioController Controlador = new UsuarioController();
-//        Controlador.cadastrarUsuario();
-//    }
+    public static void main(String[] args) throws SQLException {
+        UsuarioController Controlador = new UsuarioController();
+        Controlador.cadastrarUsuario();
+    }
 }

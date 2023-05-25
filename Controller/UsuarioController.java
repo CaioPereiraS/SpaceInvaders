@@ -11,8 +11,8 @@ public class UsuarioController {
 
     public void cadastrarUsuario() throws SQLException {
 
-        String Sentenca = "INSERT INTO TB_USUARIO(US_nick, US_senha) VALUES ('Caio','123') ";
-        Connection conexao = new Conexao().getConnection();
+        String Sentenca = "INSERT INTO tb_usuario (us_nick, us_senha) VALUES ('Caio','123') ";
+        Connection conexao = new Conexao().solicitaConnection();
         PreparedStatement statement = conexao.prepareStatement(Sentenca);
         statement.execute();
         conexao.close();
