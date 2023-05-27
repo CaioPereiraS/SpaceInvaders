@@ -18,6 +18,7 @@ public class TelaLogin extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false); // Impede o redimensionamento da janela
+        setVisible(true);
 
         // Criação do painel principal
         panel = new JPanel() {
@@ -92,6 +93,7 @@ public class TelaLogin extends JFrame {
                 // Lógica para o cadastro de usuários
                 // Implemente o código necessário para cadastrar um usuário
                 // ou redirecione para a tela de cadastro
+
             }
         });
 
@@ -99,9 +101,6 @@ public class TelaLogin extends JFrame {
         add(panel);
     }
 
-    public void exibir() {
-        setVisible(true);
-    }
 
     private void autenticarUsuario(String nick, String senha) {
         // Implemente a lógica para autenticar o usuário aqui
@@ -110,12 +109,4 @@ public class TelaLogin extends JFrame {
         // Exiba uma mensagem adequada para o resultado da autenticação
     }
 
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                TelaLogin tela = new TelaLogin();
-//                tela.exibir();
-//            }
-//        });
-//    }
 }

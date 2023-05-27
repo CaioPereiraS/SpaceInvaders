@@ -6,7 +6,8 @@ public class UsuarioModelo {
     private int ultimaPontuacao;
     private int maximaPontuacao;
 
-    // Construtor
+    // Construtores
+    public UsuarioModelo() {}
     public UsuarioModelo(String nick, String senha, int ultimaPontuacao, int maximaPontuacao) {
         this.nick = nick;
         this.senha = senha;
@@ -14,7 +15,9 @@ public class UsuarioModelo {
         this.maximaPontuacao = maximaPontuacao;
     }
 
-    public UsuarioModelo() {
+    public UsuarioModelo(String $nick, int $maximaPontuacao) {
+        this.nick = $nick;
+        this.maximaPontuacao = $maximaPontuacao;
 
     }
 

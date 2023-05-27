@@ -52,9 +52,6 @@ public class UsuarioController {
         }
         conexao.close();
 
-
-
-
     }
 
     public void obterLista() throws SQLException {

@@ -12,7 +12,7 @@ public class Animacao extends JPanel {
     public void animarMorteNave(NaveEspacial Nave, int frame) {
 
         try {
-            Nave.ship = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/morte" + frame + ".png")));
+            Nave.ship = ImageIO.read(Objects.requireNonNull(getClass().getResource("/images/Nave/Morte/morte" + frame + ".png")));
         } catch (Exception e) {
             e.printStackTrace();
         }

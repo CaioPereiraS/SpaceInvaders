@@ -72,8 +72,8 @@ public class Game extends JPanel {
             }
         });
 
-        bg1 = new Background("images/bg1.png"); //instancia do back1
-        bg2 = new Background("images/bg2.png"); //instancia do back2
+        bg1 = new Background("/images/Level/bg1.png"); //instancia do back1
+        bg2 = new Background("/images/Level/bg2.png"); //instancia do back2
         nave = new NaveEspacial();
         nave.disparo = new Tiro();
 
@@ -123,7 +123,7 @@ public class Game extends JPanel {
             nave.disparo.posY = nave.posY;
             nave.disparo.ativo = true;
             try {
-                nave.disparo.shot = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/tiro.png")));
+                nave.disparo.shot = ImageIO.read(Objects.requireNonNull(getClass().getResource("/images/Nave/tiro.png")));
             } catch (Exception e) {
                 e.printStackTrace();
             }

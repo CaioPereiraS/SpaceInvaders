@@ -1,6 +1,7 @@
 package GameModule;
 
 import Controller.UsuarioController;
+import View.TelaLogin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +26,8 @@ public class Principal {
     }
 
     public static void main(String[] args) throws SQLException {
-        UsuarioController Controlador = new UsuarioController();
-
+       TelaLogin login = new TelaLogin();
+       login.setVisible(true);
+       //new Principal();
     }
 }

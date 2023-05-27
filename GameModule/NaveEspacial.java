@@ -23,7 +23,7 @@ public class NaveEspacial extends Thread{
         posY = 520;
         velX = 1;
         try {
-            ship = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/nave/nave1.png")));
+            ship = ImageIO.read(Objects.requireNonNull(getClass().getResource("/images/Nave/Viva/nave1.png")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,7 +36,7 @@ public class NaveEspacial extends Thread{
             int finalI = i;
             new Thread(() -> {
                     try {
-                        ship = ImageIO.read(Objects.requireNonNull(getClass().getResource("images/nave/nave" + finalI + ".png")));
+                        ship = ImageIO.read(Objects.requireNonNull(getClass().getResource("/images/Nave/Viva/nave" + finalI + ".png")));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

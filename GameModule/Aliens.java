@@ -22,10 +22,11 @@ public class Aliens {
         altura = 40;
         posX = 50;
         posY = 10;
-        velX = 4f;
+        velX = 3f;
         isVisble = true;
         try {
-            inimigo = ImageIO.read(getClass().getResource("images/alien.png"));
+            inimigo = ImageIO.read(getClass().getResource("/images/Aliens/alien.png"));
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
