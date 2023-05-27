@@ -1,17 +1,21 @@
 package Model;
 
-public class Usuario {
+public class UsuarioModelo {
     private String nick;
     private String senha;
     private int ultimaPontuacao;
     private int maximaPontuacao;
 
     // Construtor
-    public Usuario(String nick, String senha, int ultimaPontuacao, int maximaPontuacao) {
+    public UsuarioModelo(String nick, String senha, int ultimaPontuacao, int maximaPontuacao) {
         this.nick = nick;
         this.senha = senha;
         this.ultimaPontuacao = ultimaPontuacao;
         this.maximaPontuacao = maximaPontuacao;
+    }
+
+    public UsuarioModelo() {
+
     }
 
     // Getters e Setters
