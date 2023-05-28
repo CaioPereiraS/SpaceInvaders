@@ -6,42 +6,52 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class TelaMensagem extends JFrame {
+    private JPanel panel;
+    private JTextField mensagem;
+    private JButton botaoOk;
 
     public TelaMensagem(String message) {
-        // Configurações da janela
-        setSize(200, 200);
-        setResizable(false);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setTitle("Mensagem");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setContentPane(new JLabel(new ImageIcon("background.jpg"))); // Substitua "background.jpg" pelo caminho da imagem de fundo
+        setResizable(false);
+        setVisible(true);
 
-        // Cria o painel de conteúdo
-        JPanel contentPane = new JPanel(new BorderLayout());
-        contentPane.setOpaque(false);
+        panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon imageIcon = new ImageIcon("images/Views/mensagem.png");
+                Image image = imageIcon.getImage();
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        panel.setLayout(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Cria o rótulo com a mensagem
         JLabel messageLabel = new JLabel(message);
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         messageLabel.setForeground(Color.WHITE);
-        contentPane.add(messageLabel, BorderLayout.CENTER);
 
-        // Cria o botão "OK"
-        JButton okButton = new JButton("OK");
-        okButton.addActionListener(new ActionListener() {
+        botaoOk = new JButton("OK");
+        botaoOk.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Fecha a janela ao clicar no botão "OK"
+                dispose();
             }
         });
-        contentPane.add(okButton, BorderLayout.SOUTH);
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.insets = new Insets(0, 0, 20, 0); // Margem inferior de 20 pixels
 
-        // Define o painel de conteúdo na janela
-        setContentPane(contentPane);
+        panel.add(messageLabel, constraints);
 
-        // Exibe a janela
-        setVisible(true);
+        constraints.gridy = 1;
+        constraints.insets = new Insets(0, 0, 0, 0); // Sem margem inferior
+        panel.add(botaoOk, constraints);
 
+        add(panel);
     }
-
 }
-
