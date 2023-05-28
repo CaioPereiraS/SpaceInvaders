@@ -1,8 +1,14 @@
 package View;
+import Controller.UsuarioController;
+import Model.UsuarioModelo;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.util.Objects;
 
 public class TelaLogin extends JFrame {
     private JPanel panel;
@@ -10,6 +16,9 @@ public class TelaLogin extends JFrame {
     private JPasswordField campoSenha;
     private JButton botaoEntrar;
     private JButton botaoCadastrar;
+    UsuarioController $controlador = new UsuarioController();
+    UsuarioModelo $usuario = new UsuarioModelo();
+    TelaMensagem $mensagem;
 
     public TelaLogin () {
         // Configurações da janela
@@ -18,7 +27,6 @@ public class TelaLogin extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false); // Impede o redimensionamento da janela
-        setVisible(true);
 
         // Criação do painel principal
         panel = new JPanel() {
@@ -26,7 +34,7 @@ public class TelaLogin extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Carrega a imagem de fundo
-                ImageIcon imageIcon = new ImageIcon("images/fundo_login.png");
+                ImageIcon imageIcon = new ImageIcon("images/Views/login.png");
                 Image image = imageIcon.getImage();
                 // Desenha a imagem de fundo no painel
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
@@ -78,11 +86,17 @@ public class TelaLogin extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Lógica para autenticar o usuário
-                String nick = campoNick.getText();
-                String senha = new String(campoSenha.getPassword());
 
+                $usuario.setNick(campoNick.getText());
+                $usuario.setSenha(new String(campoSenha.getPassword()));
                 // Chame o método adequado para autenticação do usuário
-                autenticarUsuario(nick, senha);
+                try {
+                    autenticarUsuario();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NoSuchAlgorithmException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -90,10 +104,9 @@ public class TelaLogin extends JFrame {
         botaoCadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Lógica para o cadastro de usuários
-                // Implemente o código necessário para cadastrar um usuário
-                // ou redirecione para a tela de cadastro
-
+                TelaCadastro cadastro = new TelaCadastro();
+                cadastro.setVisible(true);
+                setVisible(false);
             }
         });
 
@@ -101,12 +114,27 @@ public class TelaLogin extends JFrame {
         add(panel);
     }
 
+    public void exibir() {
+        setVisible(true);
+    }
 
-    private void autenticarUsuario(String nick, String senha) {
-        // Implemente a lógica para autenticar o usuário aqui
-        // Você pode fazer a verificação no banco de dados ou em uma estrutura de dados
-        // Exemplo: comparar com valores fixos ou consultar um serviço externo
-        // Exiba uma mensagem adequada para o resultado da autenticação
+    private void autenticarUsuario() throws SQLException, NoSuchAlgorithmException {
+        if (Objects.equals($usuario.getNick(), "")){
+            $mensagem = new TelaMensagem("Verifique o Nick em branco");
+            $mensagem.setVisible(true);
+        }else if(Objects.equals($usuario.getSenha(), "")){
+            $mensagem = new TelaMensagem("Verifique a Senha em branco");
+            $mensagem.setVisible(true);
+        }else{
+           if($controlador.loggar($usuario)){
+            TelaRanking ranking = new TelaRanking();
+            ranking.setVisible(true);
+           }else{
+               $mensagem = new TelaMensagem("Usuario ou senha invalidos");
+               $mensagem.setVisible(true);
+           }
+        }
+
     }
 
 }

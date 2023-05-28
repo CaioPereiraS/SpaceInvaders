@@ -1,10 +1,14 @@
 package GameModule;
 
+import Controller.Conexao;
 import Controller.UsuarioController;
 import View.TelaLogin;
+import View.TelaMensagem;
+import View.TelaRanking;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Principal {
@@ -22,12 +26,15 @@ public class Principal {
         janela.setLocation(100, 100);
         janela.setVisible(true);
         janela.pack();
-
     }
 
     public static void main(String[] args) throws SQLException {
+
+       // Connection conexao = new Conexao().solicitaConnection();
        TelaLogin login = new TelaLogin();
        login.setVisible(true);
-       //new Principal();
+       // new Principal();
+       // TelaRanking ranking = new TelaRanking();
+       //TelaMensagem mensagem = new TelaMensagem("Fodasse");
     }
 }

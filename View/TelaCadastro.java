@@ -1,17 +1,27 @@
 package View;
+
+import Controller.UsuarioController;
+import Model.UsuarioModelo;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
+import java.util.Objects;
 
 public class TelaCadastro extends JFrame {
     private JPanel panel;
     private JTextField campoNick;
     private JPasswordField campoSenha;
-    private JButton botaoEntrar;
     private JButton botaoCadastrar;
+    private JButton botaoLogin;
+    UsuarioController $controlador = new UsuarioController();
+    UsuarioModelo $usuario = new UsuarioModelo();
+    TelaMensagem $mensagem;
 
-    public TelaCadastro () {
+    public TelaCadastro() {
         // Configurações da janela
         setTitle("Tela de Cadastro");
         setSize(800, 600);
@@ -25,7 +35,7 @@ public class TelaCadastro extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Carrega a imagem de fundo
-                ImageIcon imageIcon = new ImageIcon("images/fundo_login.png");
+                ImageIcon imageIcon = new ImageIcon("images/Views/cadastro.png");
                 Image image = imageIcon.getImage();
                 // Desenha a imagem de fundo no painel
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
@@ -49,13 +59,13 @@ public class TelaCadastro extends JFrame {
         campoSenha.setBackground(new java.awt.Color(0, 0, 0));
         campoSenha.setForeground(new java.awt.Color(255, 255, 255));
 
-        botaoEntrar = new JButton("Cadastrar");
-        botaoEntrar.setMaximumSize(new Dimension(220, 25));
-        botaoEntrar.setMinimumSize(new Dimension(220, 25));
-
-        botaoCadastrar = new JButton("Fazer Login");
+        botaoCadastrar = new JButton("Cadastrar");
         botaoCadastrar.setMaximumSize(new Dimension(220, 25));
         botaoCadastrar.setMinimumSize(new Dimension(220, 25));
+
+        botaoLogin = new JButton("Fazer Login");
+        botaoLogin.setMaximumSize(new Dimension(220, 25));
+        botaoLogin.setMinimumSize(new Dimension(220, 25));
 
         // Configuração do layout do painel
         GridBagConstraints constraints = new GridBagConstraints();
@@ -69,29 +79,33 @@ public class TelaCadastro extends JFrame {
         panel.add(campoNick, constraints);
         panel.add(labelSenha, constraints);
         panel.add(campoSenha, constraints);
-        panel.add(botaoEntrar, constraints);
         panel.add(botaoCadastrar, constraints);
+        panel.add(botaoLogin, constraints);
 
         // Configura o botão de entrar
-        botaoEntrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Lógica para autenticar o usuário
-                String nick = campoNick.getText();
-                String senha = new String(campoSenha.getPassword());
-
-                // Chame o método adequado para autenticação do usuário
-                autenticarUsuario(nick, senha);
-            }
-        });
-
-        // Configura o botão de cadastrar
         botaoCadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Lógica para o cadastro de usuários
-                // Implemente o código necessário para cadastrar um usuário
-                // ou redirecione para a tela de cadastro
+                // Lógica para inserir usuarios
+                $usuario.setNick(campoNick.getText());
+                $usuario.setSenha(new String(campoSenha.getPassword()));
+                try {
+                    validarCadastro();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NoSuchAlgorithmException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
+        // Configura o botão de ir Login
+        botaoLogin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TelaLogin login = new TelaLogin();
+                login.setVisible(true);
+                setVisible(false);
             }
         });
 
@@ -103,11 +117,30 @@ public class TelaCadastro extends JFrame {
         setVisible(true);
     }
 
-    private void autenticarUsuario(String nick, String senha) {
-        // Implemente a lógica para autenticar o usuário aqui
-        // Você pode fazer a verificação no banco de dados ou em uma estrutura de dados
-        // Exemplo: comparar com valores fixos ou consultar um serviço externo
-        // Exiba uma mensagem adequada para o resultado da autenticação
+    private void validarCadastro() throws SQLException, NoSuchAlgorithmException {
+        // verificar se os campos estão vazios
+        if (Objects.equals($usuario.getNick(), "")) {
+            $mensagem = new TelaMensagem("Verifique o Nick em branco");
+            $mensagem.setVisible(true);
+        } else if (Objects.equals($usuario.getSenha(), "")) {
+            $mensagem = new TelaMensagem("Verifique a Senha em branco");
+            $mensagem.setVisible(true);
+        } else {
+            // verificar nick existente
+            if (!$controlador.validarNick($usuario.getNick())) {
+                $mensagem = new TelaMensagem("Nick já existe");
+                $mensagem.setVisible(true);
+            } else {
+                if ($controlador.cadastrarUsuario($usuario)) {
+                    $mensagem = new TelaMensagem("Cadastrado com sucesso \n" + "Vá para o login");
+                    $mensagem.setVisible(true);
+                } else {
+                    $mensagem = new TelaMensagem("Ocorreu um erro");
+                    $mensagem.setVisible(true);
+                }
+            }
+        }
+
     }
 
 

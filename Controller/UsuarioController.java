@@ -1,57 +1,63 @@
 package Controller;
 
 import Model.UsuarioModelo;
+
 import java.sql.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 public class UsuarioController {
 
-    public UsuarioController(){
+    public UsuarioController() {
 
     }
 
-    public void cadastrarUsuario() throws SQLException {
-        String Sentenca = "";
-        Connection conexao = new Conexao().solicitaConnection();
-        PreparedStatement statement = conexao.prepareStatement(Sentenca);
-        statement.execute();
-        conexao.close();
+    public boolean cadastrarUsuario(UsuarioModelo $modelo) throws SQLException, NoSuchAlgorithmException {
+
+        $modelo.setSenha(criptorgrafarSenha($modelo.getSenha()));
+
+        try {
+            String Sentenca = "insert into public.tb_usuario (us_nick, us_senha, us_melhorpontuacao) values ('" + $modelo.getNick() + "','" + $modelo.getSenha() + "',0)";
+            Connection conexao = new Conexao().solicitaConnection();
+            PreparedStatement statement = conexao.prepareStatement(Sentenca);
+            statement.execute();
+            conexao.close();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
-    public void loggar(UsuarioModelo $modelo) throws SQLException, NoSuchAlgorithmException {
+    public boolean loggar(UsuarioModelo $modelo) throws SQLException, NoSuchAlgorithmException {
 
         // EXECUTA A QUERY
-        String Sentenca = "SELECT us_nick, us_senha FROM tb_usuario WHERE us_nick = "+"'"+ $modelo.getNick()+"'" ;
-        Connection conexao = new Conexao().solicitaConnection();
-        PreparedStatement statement = conexao.prepareStatement(Sentenca);
-        statement.setString(1, $modelo.getNick());
-        ResultSet resultSet = statement.executeQuery();
 
-        UsuarioModelo autenticador = new UsuarioModelo();
+        try {
+            String Sentenca = "SELECT us_nick, us_senha FROM tb_usuario WHERE us_nick = " + "'" + $modelo.getNick() + "'";
+            Connection conexao = new Conexao().solicitaConnection();
+            PreparedStatement statement = conexao.prepareStatement(Sentenca);
+            ResultSet resultSet = statement.executeQuery();
 
-        if (resultSet.next()) {
-            // Colocando os valores da senteça nas variaveis
-            autenticador.setSenha(resultSet.getString("us_senha"));
-            autenticador.setNick(resultSet.getString("us_nick"));
 
-            //criptografando a senha que veio da tela
-            $modelo.setSenha(criptorgrafarSenha($modelo.getSenha()));
+            if (resultSet.next()) {
+                // Colocando os valores da senteça nas variaveis
+                String autenticador = resultSet.getString("us_senha");
 
-            //coparando as senha
-            if ($modelo.getSenha() == autenticador.getSenha()){
-                // entrar
-
-            }else{
-                //
+                conexao.close();
+                //criptografando a senha que veio da tela
+                $modelo.setSenha(criptorgrafarSenha($modelo.getSenha()));
+                //coparando as senha
+                if (Objects.equals($modelo.getSenha(), autenticador)) {
+                    return true;
+                }
+                //else do resultado da consulta
             }
-        //else do resultado da consulta
-        }else {
 
+        } catch (SQLException e) {
         }
-        conexao.close();
-
+        return false;
     }
 
     public void obterLista() throws SQLException {
@@ -60,6 +66,26 @@ public class UsuarioController {
         PreparedStatement statement = conexao.prepareStatement(Sentenca);
         statement.execute();
         conexao.close();
+    }
+
+    public boolean validarNick(String $nick) throws SQLException {
+        try {
+            String Sentenca = "SELECT us_nick FROM tb_usuario WHERE us_nick = " + "'" + $nick + "'";
+            Connection conexao = new Conexao().solicitaConnection();
+            PreparedStatement statement = conexao.prepareStatement(Sentenca);
+            ResultSet resultSet = statement.executeQuery();
+            int rowCount = 0;
+            while (resultSet.next()) {
+                rowCount++;
+            }
+            if (rowCount < 1) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+
+        }
+        return false;
     }
 
     public static String criptorgrafarSenha(String senha) throws NoSuchAlgorithmException {
@@ -78,4 +104,5 @@ public class UsuarioController {
 
         return hexString.toString();
     }
+
 }
