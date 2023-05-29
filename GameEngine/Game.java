@@ -1,5 +1,6 @@
 package GameEngine;
 
+import Controlador.UsuarioControlador;
 import Modelo.UsuarioModelo;
 import View.TelaGameOver;
 
@@ -8,6 +9,7 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class Game extends JPanel {
@@ -90,11 +92,17 @@ public class Game extends JPanel {
         setLayout(null);
 
         // é invocado em uma nova unidade de execução
-        new Thread(this::gameloop).start();
+        new Thread(() -> {
+            try {
+                gameloop();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
     }
 
     // método do game loop
-    public void gameloop() {
+    public void gameloop() throws SQLException {
         while (!fim) {//loop
             handlerEvents();
             // render e configura os 60 fps
@@ -106,9 +114,13 @@ public class Game extends JPanel {
             }
             update();
         }
+
         if (fim) {
             //game over
-            TelaGameOver gameOver  = new TelaGameOver($usuarioLogado.getUltimaPontuacao());
+            $usuarioLogado.setUltimaPontuacao(pontuacao);
+            TelaGameOver gameOver = new TelaGameOver($usuarioLogado.getUltimaPontuacao());
+            UsuarioControlador $controlador = new UsuarioControlador();
+            $controlador.inserirPontuacao($usuarioLogado);
         }
 
     }
@@ -171,19 +183,22 @@ public class Game extends JPanel {
                     listaAlien[i][j].posX += listaAlien[i][j].velX;
                     Aliens atual = listaAlien[i][j];
                     //colidindo com a tela
-                    nave.Viva = atual.testeColisaoTela(atual);
-                    //colidindo com a nave
-                    nave.Viva = atual.testeColisaoNave(atual, nave)
+                    if (atual.testeColisaoTela(atual)) {
+                        return fim = true;
+                    }
+                    if (atual.testeColisaoNave(atual, nave)) {
+                        return fim = true;
+                    }
 
-                    ;
                     //colidindo com o tiro
                     if (atual.testeColisaoDisparo(atual, nave)) {
                         total_de_naves--;
                         pontuacao += 1;
                         if (total_de_naves == 0) {
-                            fim = true;
+                            return fim = true;
                         }
                     }
+
                 }
             }
             // checa alien com o tiro
@@ -214,6 +229,11 @@ public class Game extends JPanel {
             g.drawImage(nave.disparo.shot, nave.disparo.posX, nave.disparo.posY, null);
         }
 
+    }
+
+    public boolean fimDeJogo() {
+
+        return false;
     }
 
 }

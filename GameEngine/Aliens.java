@@ -45,9 +45,9 @@ public class Aliens {
 
         //colisão com o fim da página
         if ((alienAtual.posY + alienAtual.altura) > Principal.ALTURA_TELA && alienAtual.isVisble) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public boolean testeColisaoNave(Aliens alienAtual, NaveEspacial nave) {
@@ -58,10 +58,10 @@ public class Aliens {
                 nave.posY >= alienAtual.posY &&
                 alienAtual.isVisble) {
             alienAtual.velX = 0;
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
 

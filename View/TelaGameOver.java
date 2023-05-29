@@ -29,8 +29,13 @@ public class TelaGameOver extends JFrame {
         };
         panel.setLayout(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        String mensagem= "";
+        if(pontuacao==48){
+            mensagem = "Você obteve a pontuação maxima \n Sua pontuação: " + pontuacao;
+        }else{
+            mensagem = "Fim de jogo \n Sua pontuação: " + pontuacao;
+        }
 
-        String mensagem = "Fim de jogo \n Sua pontuação: " + pontuacao;
         JLabel messageLabel = new JLabel(mensagem);
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         messageLabel.setForeground(Color.WHITE);
