@@ -1,6 +1,6 @@
-package Controller;
+package Controlador;
 
-import Model.UsuarioModelo;
+import Modelo.UsuarioModelo;
 
 import java.sql.*;
 import java.nio.charset.StandardCharsets;
@@ -8,10 +8,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
-public class UsuarioController {
+public class UsuarioControlador {
 
 
-    public UsuarioController() {
+    public UsuarioControlador() {
 
     }
 

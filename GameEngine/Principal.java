@@ -1,15 +1,11 @@
-package GameModule;
-
-import Controller.Conexao;
-import Controller.UsuarioController;
-import View.TelaLogin;
-import View.TelaMensagem;
-import View.TelaRanking;
+package GameEngine;
 
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.SQLException;
+import Controlador.Conexao;
+import View.TelaLogin;
 
 public class Principal {
     public static final int LARGURA_TELA = 800;
@@ -30,10 +26,10 @@ public class Principal {
 
     public static void main(String[] args) throws SQLException {
 
-       // Connection conexao = new Conexao().solicitaConnection();
-       //TelaLogin login = new TelaLogin();
-       //login.setVisible(true);
-        new Principal();
+       //Connection conexao = new Conexao().solicitaConnection();
+       TelaLogin login = new TelaLogin();
+       login.setVisible(true);
+       // new Principal();
        //TelaRanking ranking = new TelaRanking();
        //TelaMensagem mensagem = new TelaMensagem("Fodasse");
     }

@@ -1,15 +1,13 @@
 package View;
 
-import Controller.UsuarioController;
-import GameModule.Principal;
-import Model.UsuarioModelo;
+import Controlador.UsuarioControlador;
+import GameEngine.Principal;
+import Modelo.UsuarioModelo;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 public class TelaRanking extends JFrame {
@@ -17,7 +15,7 @@ public class TelaRanking extends JFrame {
     private JTable rankingTable;
     private DefaultTableModel tableModel;
     private JButton botaoPlay;
-    UsuarioController $controlador = new UsuarioController();
+    UsuarioControlador $controlador = new UsuarioControlador();
     UsuarioModelo[] listaUsuario = $controlador.obterLista();
 
     public TelaRanking() throws SQLException {

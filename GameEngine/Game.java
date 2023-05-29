@@ -1,9 +1,4 @@
-package GameModule;
-
-import GameModule.Aliens;
-import GameModule.Animacao;
-import GameModule.Background;
-import GameModule.NaveEspacial;
+package GameEngine;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

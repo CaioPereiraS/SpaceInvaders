@@ -1,4 +1,4 @@
-package GameModule;
+package GameEngine;
 
 import java.awt.BorderLayout;
 

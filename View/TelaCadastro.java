@@ -1,7 +1,7 @@
 package View;
 
-import Controller.UsuarioController;
-import Model.UsuarioModelo;
+import Controlador.UsuarioControlador;
+import Modelo.UsuarioModelo;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +17,7 @@ public class TelaCadastro extends JFrame {
     private JPasswordField campoSenha;
     private JButton botaoCadastrar;
     private JButton botaoLogin;
-    UsuarioController $controlador = new UsuarioController();
+    UsuarioControlador $controlador = new UsuarioControlador();
     UsuarioModelo $usuario = new UsuarioModelo();
     TelaMensagem $mensagem;
 

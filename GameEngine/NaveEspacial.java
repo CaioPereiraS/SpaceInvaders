@@ -1,4 +1,4 @@
-package GameModule;
+package GameEngine;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

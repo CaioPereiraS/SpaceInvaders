@@ -1,4 +1,4 @@
-package GameModule;
+package GameEngine;
 
 import javax.swing.*;
 import javax.imageio.ImageIO;
