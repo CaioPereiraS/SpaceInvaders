@@ -129,4 +129,36 @@ public class UsuarioControlador {
         return hexString.toString();
     }
 
+    public static boolean inserirPontuacao(UsuarioModelo $modelo) throws SQLException {
+
+        try{
+        // Insere a última pontuação na tabela tb_usuario
+        Connection conexao = new Conexao().solicitaConnection();
+        String inserirPontuacaoSQL = "UPDATE tb_usuario SET us_ultimapontuacao ="+ $modelo.getUltimaPontuacao() +"WHERE us_nick = '"+ $modelo.getNick() +"'";
+        PreparedStatement inserirPontuacaoStatement = conexao.prepareStatement(inserirPontuacaoSQL);
+        inserirPontuacaoStatement.executeUpdate();
+
+        // Verifica se a última pontuação é maior que a us_melhorpontuacao atual
+        String verificarMelhorPontuacaoSQL = "SELECT us_melhorpontuacao FROM tb_usuario WHERE us_nick = '" + $modelo.getNick() + "'";
+        PreparedStatement verificarMelhorPontuacaoStatement = conexao.prepareStatement(verificarMelhorPontuacaoSQL);
+        ResultSet resultSet = verificarMelhorPontuacaoStatement.executeQuery();
+
+        if (resultSet.next()) {
+            int melhorPontuacaoAtual = resultSet.getInt("us_melhorpontuacao");
+
+            if ($modelo.getUltimaPontuacao() > melhorPontuacaoAtual) {
+                // Atualiza a us_melhorpontuacao se a última pontuação for maior
+                String atualizarMelhorPontuacaoSQL = "UPDATE tb_usuario SET us_melhorpontuacao ="+ $modelo.getUltimaPontuacao() +"WHERE us_nick = '"+ $modelo.getNick() +"'";
+                PreparedStatement atualizarMelhorPontuacaoStatement = conexao.prepareStatement(atualizarMelhorPontuacaoSQL);
+                atualizarMelhorPontuacaoStatement.executeUpdate();
+            }
+            return true;
+        }
+        }catch (SQLException e){
+        }
+
+        return false;
+
+    }
+
 }

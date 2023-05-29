@@ -18,7 +18,7 @@ public class TelaRanking extends JFrame {
     UsuarioControlador $controlador = new UsuarioControlador();
     UsuarioModelo[] listaUsuario = $controlador.obterLista();
 
-    public TelaRanking() throws SQLException {
+    public TelaRanking(UsuarioModelo $usuarioLogado) throws SQLException {
         // Configurações da janela
         setSize(800, 600);
         setResizable(false);
@@ -65,7 +65,7 @@ public class TelaRanking extends JFrame {
         playButton.addActionListener(e -> {
             // Lógica do botão "Play"
 
-            final Principal principal = new Principal();
+            final Principal principal = new Principal($usuarioLogado);
             setVisible(false);
             System.out.println("Botão 'Play' pressionado");
 

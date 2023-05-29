@@ -127,9 +127,10 @@ public class TelaLogin extends JFrame {
             $mensagem.setVisible(true);
         }else{
            if($controlador.loggar($usuario)){
-            TelaRanking ranking = new TelaRanking();
+            TelaRanking ranking = new TelaRanking($usuario);
             ranking.setVisible(true);
             setVisible(false);
+
            }else{
                $mensagem = new TelaMensagem("Usuario ou senha invalidos");
                $mensagem.setVisible(true);
