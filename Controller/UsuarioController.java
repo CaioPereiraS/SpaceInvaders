@@ -10,6 +10,7 @@ import java.util.Objects;
 
 public class UsuarioController {
 
+
     public UsuarioController() {
 
     }
@@ -60,12 +61,35 @@ public class UsuarioController {
         return false;
     }
 
-    public void obterLista() throws SQLException {
-        String Sentenca = "";
-        Connection conexao = new Conexao().solicitaConnection();
-        PreparedStatement statement = conexao.prepareStatement(Sentenca);
-        statement.execute();
-        conexao.close();
+    public UsuarioModelo[] obterLista() throws SQLException {
+
+        UsuarioModelo[] usuarios = null;
+        try {
+            String Sentenca = "SELECT us_nick, us_melhorpontuacao FROM tb_usuario ORDER BY us_melhorpontuacao DESC LIMIT 10";
+            Connection conexao = new Conexao().solicitaConnection();
+            PreparedStatement statement = conexao.prepareStatement(Sentenca);
+            ResultSet resultSet = statement.executeQuery();
+
+
+            // Criar o array de usuários com o tamanho adequado
+            usuarios = new UsuarioModelo[10];
+            // Percorrer o resultado e adicionar os usuários ao array
+            int i = 0;
+            while (resultSet.next()) {
+                String nick = resultSet.getString("us_nick");
+                int maximaPontuacao = resultSet.getInt("us_melhorpontuacao");
+
+                UsuarioModelo usuario = new UsuarioModelo(nick, maximaPontuacao);
+                usuarios[i] = usuario;
+                i++;
+            }
+            // Fechar as conexões
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return usuarios;
     }
 
     public boolean validarNick(String $nick) throws SQLException {

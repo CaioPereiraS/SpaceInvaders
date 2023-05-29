@@ -31,10 +31,10 @@ public class Principal {
     public static void main(String[] args) throws SQLException {
 
        // Connection conexao = new Conexao().solicitaConnection();
-       TelaLogin login = new TelaLogin();
-       login.setVisible(true);
-       // new Principal();
-       // TelaRanking ranking = new TelaRanking();
+       //TelaLogin login = new TelaLogin();
+       //login.setVisible(true);
+        new Principal();
+       //TelaRanking ranking = new TelaRanking();
        //TelaMensagem mensagem = new TelaMensagem("Fodasse");
     }
 }

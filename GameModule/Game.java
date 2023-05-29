@@ -1,5 +1,10 @@
 package GameModule;
 
+import GameModule.Aliens;
+import GameModule.Animacao;
+import GameModule.Background;
+import GameModule.NaveEspacial;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -7,7 +12,7 @@ import java.awt.event.KeyListener;
 import java.awt.*;
 import java.util.Objects;
 
-public class Game extends JPanel {
+public class Game extends JPanel implements KeyListener, Runnable {
     NaveEspacial nave;
     boolean k_esquerda;
     boolean k_direita;
@@ -19,6 +24,7 @@ public class Game extends JPanel {
     boolean fim = false;
     Animacao animador = new Animacao();
     int frame = 1;
+    int pontuacao = 0;
 
     //construtor
     public Game() {
@@ -36,44 +42,10 @@ public class Game extends JPanel {
             Y += 45; //a cada coluna diferença de 45 px
 
         }
-        addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_LEFT: // pega o valor da seta esquerda
-                        k_esquerda = true;
-                        break;
-                    case KeyEvent.VK_RIGHT: // pega o valor da seta direita
-                        k_direita = true;
-                        break;
-                    case KeyEvent.VK_SPACE: // pega o valor do espaço
-                        k_space = true;
-                        break;
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_LEFT: // pega o valor da seta esquerda
-                        k_esquerda = false;
-                        break;
-                    case KeyEvent.VK_RIGHT: // pega o valor da seta direita
-                        k_direita = false;
-                        break;
-                    case KeyEvent.VK_SPACE: // pega o valor do espaço
-                        k_space = false;
-                        break;
-                }
-            }
-        });
+        addKeyListener(this);
 
         bg1 = new Background("/images/Level/bg1.png"); //instancia do back1
-        bg2 = new Background("/images/Level/bg2.png"); //instancia do back2
+        bg2 = new Background("/images/Level/bg1.png"); //instancia do back2
         nave = new NaveEspacial();
         nave.disparo = new Tiro();
 
@@ -85,11 +57,11 @@ public class Game extends JPanel {
         setLayout(null);
 
         // é invocado em uma nova unidade de execução
-        new Thread(this::gameloop).start();
+        new Thread(this).start();
     }
 
     // método do game loop
-    public void gameloop() {
+    public void run() {
         while (true) {//loop infinito
             handlerEvents();
             //game over no else
@@ -168,12 +140,12 @@ public class Game extends JPanel {
                     //colidindo com a tela
                     nave.Viva = atual.testeColisaoTela(atual);
                     //colidindo com a nave
-                    nave.Viva = atual.testeColisaoNave(atual, nave)
+                    nave.Viva = atual.testeColisaoNave(atual, nave);
 
-                    ;
                     //colidindo com o tiro
                     if (atual.testeColisaoDisparo(atual, nave)) {
                         total_de_naves--;
+                        pontuacao += 1;
                         if (total_de_naves == 0) {
                             fim = true;
                         }
@@ -192,8 +164,6 @@ public class Game extends JPanel {
         g.drawImage(bg1.bg, bg1.posX, bg1.posY, null);
         g.drawImage(bg2.bg, bg2.posX, bg2.posY, null);
 
-
-
         for (int i = 0; i < 6; i++) { // desenha a matriz de aliens
             for (int j = 0; j < 8; j++) {
                 g.drawImage(listaAlien[i][j].inimigo, listaAlien[i][j].posX, listaAlien[i][j].posY, null);
@@ -203,8 +173,6 @@ public class Game extends JPanel {
         if (!nave.Viva) {
             animador.animarMorteNave(nave, frame);
             fim = true;
-
-
         }
 
         g.drawImage(nave.ship, nave.posX, nave.posY, null); // desenha a nave
@@ -216,7 +184,36 @@ public class Game extends JPanel {
         if (frame > 10) {
             frame = 1;
         }
-
     }
 
+    public void keyTyped(KeyEvent e) {
+    }
+
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_LEFT: // pega o valor da seta esquerda
+                k_esquerda = true;
+                break;
+            case KeyEvent.VK_RIGHT: // pega o valor da seta direita
+                k_direita = true;
+                break;
+            case KeyEvent.VK_SPACE: // pega o valor do espaço
+                k_space = true;
+                break;
+        }
+    }
+
+    public void keyReleased(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_LEFT: // pega o valor da seta esquerda
+                k_esquerda = false;
+                break;
+            case KeyEvent.VK_RIGHT: // pega o valor da seta direita
+                k_direita = false;
+                break;
+            case KeyEvent.VK_SPACE: // pega o valor do espaço
+                k_space = false;
+                break;
+        }
+    }
 }

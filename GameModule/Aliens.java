@@ -51,18 +51,26 @@ public class Aliens {
     }
 
     public boolean testeColisaoNave(Aliens alienAtual, NaveEspacial nave) {
-
-        if (nave.posX <= alienAtual.posX + alienAtual.largura &&
+        boolean colisaoEsquerda = nave.posX <= alienAtual.posX + alienAtual.largura &&
                 nave.posX >= alienAtual.posX &&
                 nave.posY <= alienAtual.posY + alienAtual.altura &&
                 nave.posY >= alienAtual.posY &&
-                alienAtual.isVisble) {
+                alienAtual.isVisble;
+
+        boolean colisaoDireita = nave.posX + nave.largura >= alienAtual.posX &&
+                nave.posX + nave.largura <= alienAtual.posX + alienAtual.largura &&
+                nave.posY <= alienAtual.posY + alienAtual.altura &&
+                nave.posY >= alienAtual.posY &&
+                alienAtual.isVisble;
+
+        if (colisaoEsquerda || colisaoDireita) {
             alienAtual.velX = 0;
             return false;
         }
-
         return true;
     }
+
+
 
     public boolean testeColisaoDisparo(Aliens alienAtual, NaveEspacial nave) {
 
