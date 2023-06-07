@@ -3,9 +3,9 @@ package Controlador;
 import java.sql.*;
 public class Conexao {
 
-    private static final String URL = "jdbc:postgresql://containers-us-west-31.railway.app:6461/railway";
+    private static final String URL = "jdbc:postgresql://containers-us-west-137.railway.app:7621/railway";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "sC41XINlRhSmf5fqkRqR";
+    private static final String PASSWORD = "hvIVeUVRbQ2eJhhOQ0pR";
 
     public Connection solicitaConnection() {
 

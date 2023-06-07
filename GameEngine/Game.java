@@ -3,6 +3,7 @@ package GameEngine;
 import Controlador.UsuarioControlador;
 import Modelo.UsuarioModelo;
 import View.TelaGameOver;
+import View.TelaRanking;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -114,15 +115,7 @@ public class Game extends JPanel {
             }
             update();
         }
-
-        if (fim) {
-            //game over
-            $usuarioLogado.setUltimaPontuacao(pontuacao);
-            TelaGameOver gameOver = new TelaGameOver($usuarioLogado.getUltimaPontuacao());
-            UsuarioControlador $controlador = new UsuarioControlador();
-            $controlador.inserirPontuacao($usuarioLogado);
-        }
-
+        fimDeJogo();
     }
 
     public void handlerEvents() {
@@ -231,9 +224,18 @@ public class Game extends JPanel {
 
     }
 
-    public boolean fimDeJogo() {
-
-        return false;
+    public void fimDeJogo() throws SQLException {
+        if (fim) {
+            //game over
+            $usuarioLogado.setUltimaPontuacao(pontuacao);
+            TelaGameOver gameOver = new TelaGameOver($usuarioLogado.getUltimaPontuacao());
+            UsuarioControlador $controlador = new UsuarioControlador();
+            $controlador.inserirPontuacao($usuarioLogado);
+            TelaRanking ranking = new TelaRanking($usuarioLogado);
+            ranking.setVisible(true);
+            this.setVisible(false);
+            Game.super.setVisible(false);
+        }
     }
 
 }
