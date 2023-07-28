@@ -33,7 +33,7 @@ public class UsuarioControlador {
 
     public boolean loggar(UsuarioModelo $modelo) throws SQLException, NoSuchAlgorithmException {
 
-        // EXECUTA A QUERY
+        // EXECUTA A QUERY ABAIXO
 
         try {
             String Sentenca = "SELECT us_nick, us_senha FROM tb_usuario WHERE us_nick = " + "'" + $modelo.getNick() + "'";
